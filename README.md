@@ -34,3 +34,11 @@ Server caches the requests and responses per session so it can send a
 history of the conversation to the LLM as needed
 
 No build system if we can get away with it
+
+# in repo kanban board
+
+This repo uses a git committed kanban board. Install
+[hammock](https://github.com/jessebmiller/hammock) to use it. It's
+really only built for my personal use, but if you want to use it, I'll
+try and make it work for you. The docs over there are pretty out of
+date too. /shrug
