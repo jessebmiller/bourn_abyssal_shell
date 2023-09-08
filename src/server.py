@@ -31,6 +31,17 @@ def index():
 def style():
     return send_from_directory('.', 'style.css')
 
+def make_prompt(history):
+    """ Create a prompt from the history of messages """
+    prompt = "The following is a conversation with an AI acting as a mystery game for a human. The AI is responding with only the text that a debian linux terminal would output. "
+    prompt += "The twist is that a cosmic horror old god has possessed the machine and is trying to gently coax the human into starting a cult in their name. "
+    prompt += "The human is here to have fun exploring this weird system and is to understand and explore what's going on. "
+    prompt += "\n\n"
+    prompt += "\n".join(history[-10:])
+    prompt += "\n"
+    print(prompt)
+    return prompt
+
 @app.route('/execute-command', methods=['POST'])
 def execute_command():
     command = request.form.get('command')
@@ -38,21 +49,20 @@ def execute_command():
     # Store the command in session history
     if 'history' not in session:
         session['history'] = []
-    session['history'].append(command)
-    session.modified = True  # Ensure the session gets saved
 
-    # TODO: Interface with LLM and get a response.
-    # For this example, we're just using a basic GPT-3 prompt.
-    # You can expand this with more complex interactions.
+    session['history'].append("$ " + command)
+
     response = openai.Completion.create(
       engine="text-davinci-002",
-      prompt=f'''pretend I'm a linux terminal\n\n# {command}\n\n''',
+      prompt=make_prompt(session['history']),
       max_tokens=150
     ).choices[0].text.strip()
 
-    print(session['history'])
-    return f'<p class="response">{response}</p>'
+    session['history'].append(response)
+    session.modified = True  # Ensure the session gets saved
+
+    return "<p>$ " + command + "</p>" + ''.join([f'<p class="response">{r}</p>' for r in response.split('\n')])
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=8880)
 
