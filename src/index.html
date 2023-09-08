@@ -1,41 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bourn Abyssal SHell</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/htmx.org@1.4.0"></script>
-</head>
+    <script src="https://unpkg.com/htmx.org@1.9.5" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>
+  </head>
 
-<body>
+  <body>
 
     <header>
-        <h1>Bourn Abyssal SHell</h1>
-        <p>A toy linux shell mystery cosmic horror game and an experiment with AI.</p>
+      <h1>Bourn Abyssal SHell</h1>
+      <p>A toy linux shell mystery cosmic horror game and an experiment with AI.</p>
     </header>
 
     <main>
-        <section id="terminal">
-            <div id="output-window">
-                <!-- Messages from the server will appear here -->
-            </div>
+      <section id="terminal">
+        <div id="output-window">
+          <!-- Messages from the server will appear here -->
+        </div>
 
-            <form hx-post="/execute-command" hx-target="#output-window" hx-swap="beforeend">
-                <input type="text" name="command" placeholder="$" autofocus>
-                <input type="submit" value="Execute" style="display: none;">
-            </form>
-        </section>
+        <form hx-post="/execute-command" hx-target="#output-window" hx-swap="beforeend" hx-on::after-request="if(event.detail.successful) this.reset()">
+          $ <input type="text" name="command" autofocus>
+          <input type="submit" value="Execute" style="display: none;">
+        </form>
+      </section>
     </main>
 
-    <footer>
-        <p>Designed with simplicity, fun, coherence, and reliability in mind.</p>
-    </footer>
-
-    <script src="scripts.js"></script>
-
-</body>
-
+  </body>
 </html>
 
